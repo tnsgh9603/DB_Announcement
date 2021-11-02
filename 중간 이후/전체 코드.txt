@@ -1,0 +1,307 @@
+
+--- 소비자 테이블 생성
+create table customer(
+passport_no Number not null, -- 여권번호(기본키)
+name char(50), -- 소비자 이름
+id char(50), -- 소비자가 사용하는 ID
+PRIMARY key (passport_no) -- 여권번호를 기본키로 선정
+);
+
+
+
+--- 항공권 테이블 생성
+create table airticket(
+	airplane_num char(20), -- 항공기번호(외래키)
+	arrive_where char(20), -- 출발지
+	destination char(20), -- 도착지
+	seat_num number, -- 좌석번호
+	seat_class char(30) default '이코노미', -- 좌석등급
+	arrive_date number, -- 탑승일
+	res_ox char(10), -- 예약 여부
+	price number check(price<1000000), -- 가격
+    passport_num number, -- 여권번호
+    res_no char(30), -- 예약 번호(기본키)
+    
+    PRIMARY KEY(res_no), -- 예약 번호를 기본키로 선정
+    foreign key(airplane_num) REFERENCES airplane(Flight_no) on delete cascade , -- 외래키로 참조
+    foreign key(passport_num) REFERENCES customer(passport_no)  on delete cascade -- 외래키로 참조
+);
+
+
+
+--- 기내식 테이블 생성
+create table airplanefood(
+foodRvNum char(30) not null, -- 음식예약번호
+passport_num number, -- 여권 번호
+order_date number, -- 주문 날짜
+primary key (foodRvNum), -- 음식예약번호를 기본키로 선정
+foreign key(passport_num) REFERENCES customer(passport_no)  on delete cascade -- 외래키로 참조
+);
+-- 갈비찜덮밥, 어린이미트치즈볶음밥, 고드레나물비빔밥, 베이컨토마토스파게티, 잡채불고기덮밥, 리얼함박스테이크, 마히마히(흰살생선요리), 데리야끼치킨, 불고기, 불고기도시락세트를 각각 음식번호 'A00'부터 'A10'까지 매김
+
+
+
+--- 공항 테이블 생성
+create table airport(
+aptname char(20) not null, -- 공항이름 기본키
+aptnumber char(20), -- 전화번호
+corporation char(30), -- 소속
+primary key (aptname) 
+);
+
+
+
+--- 항공기 테이블 생성
+CREATE TABLE Airplane(
+Flight_no char(20) Not Null, -- 항공기 번호
+Captain CHAR(20), -- 기장
+attendant char(20), -- 승무원
+Primary key(Flight_no) -- 항공기 번호를 기본키로 선정
+);
+
+
+
+--- 면세품 테이블 생성
+create table dutyfreeitem( --면세품
+item_num char(30) not null, --상품번호 기본키
+item_name char(30),-- 상품명
+passport_num number default null,-- 여권번호
+primary key (item_num),
+foreign key(passport_num) REFERENCES customer(passport_no)  on delete cascade -- 외래키로 참조
+);
+
+
+
+--- 티웨이 항공사 테이블 생성
+create table tway_airline(
+ceo char(20) not null, --경영자
+airportname char(20), -- 공항이름
+foreign key (airportname) references airport(aptname) on delete cascade,
+primary key(ceo)
+);
+
+
+
+--- 직원 테이블 생성
+CREATE TABLE Tway_EMPLOYEE (
+EMPNO NUMBER NOT NULL, -- 사원번호
+EMPNAME CHAR(10) UNIQUE, -- 사원이름
+TITLE CHAR(10) DEFAULT '사원', -- 직급
+DEPTNAME CHAR(15), -- 부서
+MANAGER NUMBER, -- 관리자
+SALARY NUMBER, -- 급여
+FOREIGN KEY(MANAGER) REFERENCES Tway_EMPLOYEE(EMPNO) on delete cascade,
+PRIMARY KEY(EMPNO)
+);
+
+
+
+--- 소비자 테이블 삭제
+drop table customer;
+
+--- 항공권 테이블 삭제
+drop table airticket;
+
+--- 기내식 테이블 삭제
+drop table airplanefood;
+
+--- 공항 테이블 삭제
+drop table airport;
+
+--- 항공기 테이블 삭제
+drop table airplane;
+
+--- 면세품 테이블 삭제
+drop table dutyfreeitem;
+
+--- 티웨이 항공사 테이블 삭제
+drop table tway_airline;
+
+--- 직원 테이블 삭제
+drop table Tway_EMPLOYEE;
+
+
+
+--- 소비자 튜플 생성(30명) (여권번호,이름,ID)
+INSERT into customer values(100,'홍길동','Hong');
+INSERT into customer values(101,'고길동','Hoit');
+INSERT into customer values(102,'신길동','ShinGil-dong');
+INSERT into customer values(103,'김철수','Kim');
+INSERT into customer values(104,'배철수','ship-Withdraw');
+INSERT into customer values(105,'안철수','Ahnlab');
+INSERT into customer values(106,'김영희','0Hee');
+INSERT into customer values(107,'안영희','byebye');
+INSERT into customer values(108,'권순호','tnsgh');
+INSERT into customer values(109,'정우영','tropical');
+INSERT into customer values(110,'배준일','wnsdlf');
+INSERT into customer values(111,'류연동','YeonDong');
+INSERT into customer values(112,'유승주','USJoo');
+INSERT into customer values(113,'이영수','Lee');
+INSERT into customer values(114,'국영수','LanguageEM');
+INSERT into customer values(115,'양정훈','sheep');
+INSERT into customer values(116,'강정훈','chickenGangjeong');
+INSERT into customer values(117,'이미영','Miyoung');
+INSERT into customer values(118,'김미영','Team leader');
+INSERT into customer values(119,'이세현','Sehyun');
+INSERT into customer values(120,'이용','LeeDragon');
+INSERT into customer values(121,'손흥민','Son');
+INSERT into customer values(122,'황의조','MrHwang');
+INSERT into customer values(123,'황희찬','Chan');
+INSERT into customer values(124,'이승우','victory');
+INSERT into customer values(125,'구자철','9jachul');
+INSERT into customer values(126,'김보경','Bogyeong');
+INSERT into customer values(127,'윤빛가람','lightning');
+INSERT into customer values(128,'이지은','IU');
+INSERT into customer values(129,'송지은','Secret');
+
+
+
+--- 항공권 튜플 생성(27개) (항공기 번호, 출발지, 도착지, 좌석번호, 좌석등급, 탑승일, 예약 여부, 가격, 여권번호, 예약번호)
+insert into airticket values('HL8235','인천','부산',4299,'이코노미',20201119,'O',120000,100,'C01');
+insert into airticket values('HL8237','인천','김포',4381,'비즈니스',20201119,'X',190000,101,'C02');
+insert into airticket values('HL8268','김포','나리타',4378,'비즈니스',20201119,'X',260000,102,'C03');
+insert into airticket values('HL8294','부산','나리타',4252,'이코노미',20201119,'O',160000,103,'C04');
+insert into airticket values('HL8000','김포','나리타',4268,'이코노미',20201119,'O',160000,104,'C05');
+insert into airticket values('HL8024','인천','나리타',4211,'비즈니스',20201119,'X',260000,105,'C06');
+insert into airticket values('HL8030','김포','부산',4189,'이코노미',20201119,'X',120000,106,'C07');
+insert into airticket values('HL8047','인천','김포',4569,'이코노미',20201119,'O',120000,107,'C08');
+insert into airticket values('HL8056','김포','부산',4344,'이코노미',20201119,'O',120000,108,'C09');
+insert into airticket values('HL8067','인천','부산',4555,'이코노미',20201120,'O',120000,109,'C10');
+insert into airticket values('HL8069','인천','부산',4444,'비즈니스',20201120,'X',260000,110,'C11');
+insert into airticket values('HL8098','김포','오사카',4218,'이코노미',20201120,'O',260000,111,'C12');
+insert into airticket values('HL8070','인천','부산',4325,'이코노미',20201120,'X',120000,112,'C13');
+insert into airticket values('HL8086','부산','오사카',1223,'비즈니스',20201120,'X',260000,113,'C14');
+insert into airticket values('HL8220','김포','부산',6542,'이코노미',20201120,'O',140000,114,'C15');
+insert into airticket values('HL8095','인천','부산',53,'비즈니스',20201120,'O',210000,115,'C16');
+insert into airticket values('HL8300','인천','김포',5321,'이코노미',20201121,'X',140000,116,'C17');
+insert into airticket values('HL8306','김포','부산',7441,'비즈니스',20201121,'O',210000,117,'C18');
+insert into airticket values('HL8323','김포','부산',5211,'이코노미',20201121,'O',140000,118,'C19');
+insert into airticket values('HL8324','인천','부산',4239,'비즈니스',20201121,'O',240000,119,'C20');
+insert into airticket values('HL8326','나리타','부산',4239,'비즈니스',20201121,'O',210000,120,'C21');
+insert into airticket values('HL8327','인천','부산',4239,'이코노미',20201122,'O',270000,121,'C22');
+insert into airticket values('HL8329','오사카','부산',4239,'비즈니스',20201122,'O',210000,122,'C23');
+insert into airticket values('HL8363','인천','부산',4239,'이코노미',20201122,'O',210000,123,'C24');
+insert into airticket values('HL8354','부산','나리타',4239,'비즈니스',20201122,'O',210000,124,'C25');
+insert into airticket values('HL8378','인천','양양',4239,'비즈니스',20201122,'X',280000,125,'C26');
+insert into airticket values('HL8379','인천','부산',4239,'이코노미',20201122,'O',300000,126,'C27');
+
+
+
+--- 기내식 튜플 생성(10개) (음식 예약 번호, 여권 번호, 주문 날짜)
+insert into airplanefood values('A01', 100, 20201119); 
+insert into airplanefood values('A02', 101, 20201119); 
+insert into airplanefood values('A03', 102, 20201119); 
+insert into airplanefood values('A04', 103, 20201119);
+insert into airplanefood values('A05', 104, 20201119); 
+insert into airplanefood values('A06', 105, 20201119); 
+insert into airplanefood values('A07', 106, 20201119);
+insert into airplanefood values('A08', 107, 20201119); 
+insert into airplanefood values('A09', 108, 20201119);
+insert into airplanefood values('A10', 109, 20201119); 
+
+
+
+--- 공항 튜플 생성(8개) (공항이름, 전화번호, 소속)
+insert into airport values('인천공항','0321000001','인천국제공항공사');
+insert into airport values('김포공항','0311000002','한국항공공사');
+insert into airport values('대구공항','0531000003','한국항공공사');
+insert into airport values('제주공항','0641000004','한국항공공사');
+insert into airport values('청주공항','0431000005','한국항공공사');
+insert into airport values('김해공항','0511000006','한국항공공사');
+insert into airport values('양양공항','0331000007','한국항공공사');
+insert into airport values('광주공항','0621000008','한국항공공사');
+
+
+
+--- 항공기 튜플 생성(27개) (항공기번호, 기장, 승무원)
+insert into Airplane values('HL8235','박영권','조민희');
+insert into Airplane values('HL8237','이수민','최종철');
+insert into Airplane values('HL8268','이수민','조민희');
+insert into Airplane values('HL8294','박영권','최종철');
+insert into Airplane values('HL8000','박영권','조민희');
+insert into Airplane values('HL8024','이수민','최종철');
+insert into Airplane values('HL8030','이수민','조민희');
+insert into Airplane values('HL8047','박영권','최종철');
+insert into Airplane values('HL8056','박영권','조민희');
+insert into Airplane values('HL8067','이수민','최종철');
+insert into Airplane values('HL8069','이수민','조민희');
+insert into Airplane values('HL8098','박영권','최종철');
+insert into Airplane values('HL8070','박영권','조민희');
+insert into Airplane values('HL8086','이수민','최종철');
+insert into Airplane values('HL8220','이수민','조민희');
+insert into Airplane values('HL8095','박영권','최종철');
+insert into Airplane values('HL8300','박영권','최종빈');
+insert into Airplane values('HL8306','이수민','최군석');
+insert into Airplane values('HL8323','김진호','석진구');
+insert into Airplane values('HL8324','이수민','조민희');
+insert into Airplane values('HL8326','이정빈','조민희');
+insert into Airplane values('HL8327','이선동','정민수');
+insert into Airplane values('HL8329','이수민','조민희');
+insert into Airplane values('HL8363','유선동','서민혁');
+insert into Airplane values('HL8354','김현수','조민희');
+insert into Airplane values('HL8378','이수민','김판희');
+insert into Airplane values('HL8379','오희준','조민석');
+
+
+
+--- 면세품 튜플 생성(10개) (상품번호, 상품명 , 여권 번호)
+insert into dutyfreeitem values('B01','구찌백',100);
+insert into dutyfreeitem values('B02','발렌타인23년산',101);
+insert into dutyfreeitem values('B03','립글로스',102);
+insert into dutyfreeitem values('B04','미니바',103);
+insert into dutyfreeitem values('B05','너츠초콜릿',104);
+insert into dutyfreeitem values('B06','에쎄순',105);
+insert into dutyfreeitem values('B07','정관장',106);
+insert into dutyfreeitem values('B08','로열젤리',107);
+insert into dutyfreeitem values('B09','닥터지로션',108);
+insert into dutyfreeitem values('B10','라이트베이지화장품',109);
+
+
+
+--- 티웨이 항공사 튜플 생성(8개) (경영자, 공항이름)
+insert into tway_airline values('김철수','인천공항');
+insert into tway_airline values('이창현','김포공항');
+insert into tway_airline values('박진수','대구공항');
+insert into tway_airline values('노진구','제주공항');
+insert into tway_airline values('안철수','청주공항');
+insert into tway_airline values('김희동','김해공항');
+insert into tway_airline values('김호진','양양공항');
+insert into tway_airline values('유진성','광주공항');
+
+
+
+--- 직원 튜플 생성 (사원번호, 사원이름, 직책, 부서, 매니저, 급여)  
+INSERT INTO Tway_EMPLOYEE VALUES(202001, '이성래', '대표', '운영', NULL, 5000000);
+INSERT INTO Tway_EMPLOYEE VALUES(202002, '박영권', '기장', '항공', 202001, 3000000);
+INSERT INTO Tway_EMPLOYEE VALUES(202003, '이수민', '기장', '항공', 202001, 4000000);
+INSERT INTO Tway_EMPLOYEE VALUES(202004, '최종철', '승무원', '항공', 202002, 1500000);
+INSERT INTO Tway_EMPLOYEE VALUES(202005, '조민희', '승무원', '항공', 202003, 3000000);
+INSERT INTO Tway_EMPLOYEE VALUES(202006, '김창섭', '과장', '영업', 202001, 2500000);
+INSERT INTO Tway_EMPLOYEE VALUES(202007, '김상원', '사원', '영업', 202006, 1500000);
+INSERT INTO Tway_EMPLOYEE VALUES(202008, '류연동', '사원', '고객관리', 202001, 1500000);
+
+
+
+--- 소비자 테이블 확인
+select * from customer;
+
+--- 항공권 테이블 확인
+select * from airticket;
+
+--- 기내식 테이블 확인
+select * from airplanefood;
+
+--- 항공 테이블 확인
+select * from airport;
+
+--- 비행기 테이블 확인
+select * from airplane;
+
+--- 면세품 테이블 확인
+select * from dutyfreeitem;
+
+--- 티웨이 항공사 테이블 확인
+select * from tway_airline;
+
+--- 직원 테이블 확인
+select * from Tway_EMPLOYEE;
